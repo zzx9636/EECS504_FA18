@@ -1,0 +1,50 @@
+{
+    "info": {
+        "name": "classify_svhn",
+        "type": "eta.core.types.Pipeline",
+        "version": "0.1.0",
+        "description": "A pipeline for classifying the SVHN test set using eigenbases."
+    },
+    "inputs": ["mnist_train_images",
+               "mnist_train_labels",
+               "mnist_test_images",
+               "mnist_test_labels",
+               "svhn_test"],
+    "outputs": ["error_rate_json"],
+    "modules": {
+        "svhn_classification": {
+            "name": "svhn_classification",
+            "tunable_parameters": [
+                "num_PCA", "num_neighbor"
+            ],
+            "set_parameters": {}
+        }
+    },
+    "connections": [
+        {
+            "source": "INPUT.svhn_test",
+            "sink": "svhn_classification.svhn_test"
+        },
+        {
+            "source": "INPUT.mnist_train_images",
+            "sink": "svhn_classification.mnist_train_images"
+        },
+        {
+            "source": "INPUT.mnist_train_labels",
+            "sink": "svhn_classification.mnist_train_labels"
+        },
+        {
+            "source": "INPUT.mnist_test_images",
+            "sink": "svhn_classification.mnist_test_images"
+        },
+        {
+            "source": "INPUT.mnist_test_labels",
+            "sink": "svhn_classification.mnist_test_labels"
+        },
+        {
+            "source": "svhn_classification.error_rate_file",
+            "sink": "OUTPUT.error_rate_json"
+        }
+    ]
+}
+

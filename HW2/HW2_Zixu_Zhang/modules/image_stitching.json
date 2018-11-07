@@ -1,0 +1,52 @@
+{
+    "info": {
+        "name": "image_stitching",
+        "type": "eta.core.types.Module",
+        "version": "0.1.0",
+        "description": "A module for stitching two parts of an image into one whole image",
+        "exe": "image_stitching.py"
+    },
+    "inputs": [
+        {
+            "name": "corner_locs_1",
+            "type": "eta.core.types.NpzFile",
+            "description": "An Nx2 matrix containing (x,y) locations of all corners in image 1, detected by the Harris Corner algorithm",
+            "required": true
+        },
+        {
+            "name": "corner_locs_2",
+            "type": "eta.core.types.NpzFile",
+            "description": "A Mx2 matrix containing (x,y) locations of all corners in image 2, detected by the Harris Corner algorithm",
+            "required": true
+        },
+        {
+            "name": "image_1",
+            "type": "eta.core.types.Image",
+            "description": "the first input image",
+            "required": true
+        },
+        {
+            "name": "image_2",
+            "type": "eta.core.types.Image",
+            "description": "the second input image",
+            "required": true
+        }
+    ],
+    "outputs": [
+        {
+            "name": "stitched_image",
+            "type": "eta.core.types.ImageFile",
+            "description": "The final stitched image",
+            "required": true
+        }
+    ],
+    "parameters": [
+        {
+            "name": "no_correspondence",
+            "type": "eta.core.types.Number",
+            "description": "the number of points to use when computing the homography",
+            "required": false,
+            "default": 4
+        }
+    ]
+}

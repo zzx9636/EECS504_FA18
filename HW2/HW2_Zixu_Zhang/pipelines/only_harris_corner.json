@@ -1,0 +1,74 @@
+{
+    "info": {
+        "name": "only_harris_corner",
+        "type": "eta.core.types.Pipeline",
+        "version": "0.1.0",
+        "description": "A pipeline for running the Harris Corner Detection algorithm on an image"
+    },
+    "inputs": ["input_image"],
+    "outputs": ["corners_before_suppression",
+                "corners_after_suppression",
+                "corners_response_img"],
+    "modules": {
+        "sobel_horizontal": {
+            "name": "convolution",
+            "tunable_parameters": [],
+            "set_parameters": {
+                "kernel_type": "sobel_horizontal",
+                "image_type": "grayscale",
+                "image_max_range": 1
+            }
+        },
+        "sobel_vertical": {
+            "name": "convolution",
+            "tunable_parameters": [],
+            "set_parameters": {
+                "kernel_type": "sobel_vertical",
+                "image_type": "grayscale",
+                "image_max_range": 1
+            }
+        },
+        "harris_corner": {
+            "name": "harris",
+            "tunable_parameters": [
+                "window_half_size", "threshold"
+            ],
+            "set_parameters": {
+            }
+        }
+    },
+    "connections": [
+        {
+            "source": "INPUT.input_image",
+            "sink": "sobel_horizontal.input_image"
+        },
+        {
+            "source": "INPUT.input_image",
+            "sink": "sobel_vertical.input_image"
+        },
+        {
+            "source": "sobel_horizontal.filtered_matrix",
+            "sink": "harris_corner.sobel_horizontal_result"
+        },
+        {
+            "source": "sobel_vertical.filtered_matrix",
+            "sink": "harris_corner.sobel_vertical_result"
+        },
+        {
+            "source": "INPUT.input_image",
+            "sink": "harris_corner.input_image"
+        },
+        {
+            "source": "harris_corner.corners_img_before_sup",
+            "sink": "OUTPUT.corners_before_suppression"
+        },
+        {
+            "source": "harris_corner.corners_img_after_sup",
+            "sink": "OUTPUT.corners_after_suppression"
+        },
+        {
+            "source": "harris_corner.corners_response",
+            "sink": "OUTPUT.corners_response_img"
+        }
+    ]
+}

@@ -1,0 +1,15 @@
+{
+    "pipeline": "only_harris_corner",
+    "inputs": {
+        "input_image": "data/harris_corner/concentric_circles.png"
+    },
+    "outputs": {
+        "corners_before_suppression": "out/concentric_circles_corners_before_sup.jpg",
+        "corners_after_suppression": "out/concentric_circles_corners_after_sup.jpg",
+        "corners_response_img": "out/concentric_circles_corners_response.jpg"
+    },
+    "parameters": {
+        "harris_corner.window_half_size": 1,
+        "harris_corner.threshold": 0.1
+    }
+}

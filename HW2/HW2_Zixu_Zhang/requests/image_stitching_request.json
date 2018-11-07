@@ -1,0 +1,17 @@
+{
+    "pipeline": "image_stitching",
+    "inputs": {
+        "image_1": "data/image_stitching/red1.jpg",
+        "image_2": "data/image_stitching/red2.jpg"
+    },
+    "outputs": {
+        "stitched_image": "out/stitched_image_20pts.png"
+    },
+    "parameters": {
+        "harris_corner_1.window_half_size": 1,
+        "harris_corner_2.window_half_size": 1,
+        "harris_corner_1.threshold": 0.1,
+        "harris_corner_2.threshold": 0.1,
+        "image_stitching.no_correspondence": 20
+    }
+}

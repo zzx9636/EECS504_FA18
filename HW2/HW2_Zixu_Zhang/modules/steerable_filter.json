@@ -1,0 +1,32 @@
+{
+    "info": {
+        "name": "steerable_filter",
+        "type": "eta.core.types.Module",
+        "version": "0.1.0",
+        "description": "A module for applying a steerable filter on an image",
+        "exe": "steerable_filter.py"
+    },
+    "inputs": [
+        {
+            "name": "sobel_horizontal_result",
+            "type": "eta.core.types.NpzFile",
+            "description": "The result of convolving the original image with the \"sobel_horizontal\" kernel. This will give the value of Gx (the gradient in the x direction).",
+            "required": true
+        },
+        {
+            "name": "sobel_vertical_result",
+            "type": "eta.core.types.NpzFile",
+            "description": "The result of convolving the original image with the \"sobel_vertical\" kernel. This will give the value of Gy (the gradient in the y direction).",
+            "required": true
+        }
+    ],
+    "outputs": [
+        {
+            "name": "filtered_image",
+            "type": "eta.core.types.ImageFile",
+            "description": "The output image after applying the steerable filter.",
+            "required": true
+        }
+    ],
+    "parameters": []
+}

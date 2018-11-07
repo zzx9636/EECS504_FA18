@@ -1,0 +1,56 @@
+{
+    "info": {
+        "name": "steerable_filter",
+        "type": "eta.core.types.Pipeline",
+        "version": "0.1.0",
+        "description": "A pipeline for applying a steerable filter on an image."
+    },
+    "inputs": ["input_image"],
+    "outputs": ["filtered_image"],
+    "modules": {
+        "sobel_horizontal": {
+            "name": "convolution",
+            "tunable_parameters": [],
+            "set_parameters": {
+                "kernel_type": "sobel_horizontal",
+                "image_type": "grayscale"
+            }
+        },
+        "sobel_vertical": {
+            "name": "convolution",
+            "tunable_parameters": [],
+            "set_parameters": {
+                "kernel_type": "sobel_vertical",
+                "image_type": "grayscale"
+            }
+        },
+        "steerable_filter": {
+            "name": "steerable_filter",
+            "tunable_parameters": [],
+            "set_parameters": {}
+        }
+    },
+    "connections": [
+        {
+            "source": "INPUT.input_image",
+            "sink": "sobel_horizontal.input_image"
+        },
+        {
+            "source": "INPUT.input_image",
+            "sink": "sobel_vertical.input_image"
+        },
+        {
+            "source": "sobel_horizontal.filtered_matrix",
+            "sink": "steerable_filter.sobel_horizontal_result"
+        },
+        {
+            "source": "sobel_vertical.filtered_matrix",
+            "sink": "steerable_filter.sobel_vertical_result"
+        },
+        {
+            "source": "steerable_filter.filtered_image",
+            "sink": "OUTPUT.filtered_image"
+        }
+    ]
+}
+

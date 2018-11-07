@@ -1,0 +1,6 @@
+{
+    "error_rates": {
+        "mnist_error_rate": 0.0269,
+        "svhn_error_rate": 0.8385416666666666
+    }
+}

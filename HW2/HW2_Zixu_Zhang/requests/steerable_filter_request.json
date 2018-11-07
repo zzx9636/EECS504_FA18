@@ -1,0 +1,10 @@
+{
+    "pipeline": "steerable_filter",
+    "inputs": {
+        "input_image": "data/steerable_filter/lines.png"
+    },
+    "outputs": {
+        "filtered_image": "out/steerable_filter_output.png"
+    },
+    "parameters": {}
+}

@@ -1,0 +1,65 @@
+{
+    "info": {
+        "name": "svhn_classification",
+        "type": "eta.core.types.Module",
+        "version": "0.1.0",
+        "description": "A module for classifying the SVHN (Street View House Number) dataset\nusing an eigenbasis",
+        "exe": "svhn_classification.py"
+    },
+    "inputs": [
+        {
+            "name": "svhn_test",
+            "type": "eta.core.types.File",
+            "description": "the path of the tar.gz file containing all test images for the SVHN dataset and the file \"digitStruct.mat\".",
+            "required": true
+        },
+        {
+            "name": "mnist_train_images",
+            "type": "eta.core.types.File",
+            "description": "the path of the training images for the MNIST dataset",
+            "required": true
+        },
+        {
+            "name": "mnist_train_labels",
+            "type": "eta.core.types.File",
+            "description": "the path of the training labels for the MNIST dataset",
+            "required": true
+        },
+        {
+            "name": "mnist_test_images",
+            "type": "eta.core.types.File",
+            "description": "the path of the test images for the MNIST dataset",
+            "required": true
+        },
+        {
+            "name": "mnist_test_labels",
+            "type": "eta.core.types.File",
+            "description": "the path of the test labels for the MNIST dataset",
+            "required": true
+        }
+    ],
+    "outputs": [
+        {
+            "name": "error_rate_file",
+            "type": "eta.core.types.JSONFile",
+            "description": "the JSON file that will hold the error rates computed for the MNIST test set and the SVHN test set",
+            "required": true
+        }
+    ],
+    "parameters": [
+        {
+            "name": "num_PCA",
+            "type": "eta.core.types.Number",
+            "description": "Number of principle component used to classify image",
+            "required": false,
+            "default": 20
+        },
+        {
+            "name": "num_neighbor",
+            "type": "eta.core.types.Number",
+            "description": "Number of neighbor for KNN",
+            "required": false,
+            "default": 1
+        }
+    ]
+}

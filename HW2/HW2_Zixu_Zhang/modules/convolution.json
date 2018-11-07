@@ -1,0 +1,61 @@
+{
+    "info": {
+        "name": "convolution",
+        "type": "eta.core.types.Module",
+        "version": "0.1.0",
+        "description": "A module for convolving two 2d images",
+        "exe": "convolution.py"
+    },
+    "inputs": [
+        {
+            "name": "input_image",
+            "type": "eta.core.types.Image",
+            "description": "The input image",
+            "required": true
+        }
+    ],
+    "outputs": [
+        {
+            "name": "filtered_image",
+            "type": "eta.core.types.ImageFile",
+            "description": "The result of convolution, stored in an image (all values are changed to fit between 0 and 255)",
+            "required": false
+        },
+        {
+            "name": "filtered_matrix",
+            "type": "eta.core.types.NpzFile",
+            "description": "The result of convolution, stored in a matrix (all values, including their signs, are maintained)",
+            "required": false
+        }
+    ],
+    "parameters": [
+        {
+            "name": "kernel_type",
+            "type": "eta.core.types.String",
+            "description": "The type of kernel used for convolution.",
+            "required": false,
+            "default": "x_derivative"
+        },
+        {
+            "name": "image_type",
+            "type": "eta.core.types.String",
+            "description": "The format required for convolution with the specified kernel. The image type must be grayscale when applying the Sobel kernel.",
+            "required": false,
+            "default": "color"
+        },
+        {
+            "name": "image_max_range",
+            "type": "eta.core.types.Number",
+            "description": "The maximum value of a pixel in the image. Sometimes, we may want the pixel range to be (0, 1).",
+            "required": false,
+            "default": 255
+        },
+        {
+            "name": "gaussian_sigma",
+            "type": "eta.core.types.Number",
+            "description": "The sigma used when creating the gaussian kernel.",
+            "required": false,
+            "default": 1
+        }
+    ]
+}

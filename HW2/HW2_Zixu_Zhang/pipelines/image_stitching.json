@@ -1,0 +1,126 @@
+{
+    "info": {
+        "name": "image_stitching",
+        "type": "eta.core.types.Pipeline",
+        "version": "0.1.0",
+        "description": "A pipeline for stitching two parts of an image."
+    },
+    "inputs": ["image_1",
+               "image_2"],
+    "outputs": ["stitched_image"],
+    "modules": {
+        "sobel_horizontal_1": {
+            "name": "convolution",
+            "tunable_parameters": [],
+            "set_parameters": {
+                "kernel_type": "sobel_horizontal",
+                "image_type": "grayscale",
+                "image_max_range": 1
+            }
+        },
+        "sobel_horizontal_2": {
+            "name": "convolution",
+            "tunable_parameters": [],
+            "set_parameters": {
+                "kernel_type": "sobel_horizontal",
+                "image_type": "grayscale",
+                "image_max_range": 1
+            }
+        },
+        "sobel_vertical_1": {
+            "name": "convolution",
+            "tunable_parameters": [],
+            "set_parameters": {
+                "kernel_type": "sobel_vertical",
+                "image_type": "grayscale",
+                "image_max_range": 1
+            }
+        },
+        "sobel_vertical_2": {
+            "name": "convolution",
+            "tunable_parameters": [],
+            "set_parameters": {
+                "kernel_type": "sobel_vertical",
+                "image_type": "grayscale",
+                "image_max_range": 1
+            }
+        },
+        "harris_corner_1": {
+            "name": "harris",
+            "tunable_parameters": [
+                "window_half_size", "threshold"
+            ],
+            "set_parameters": {
+            }
+        },
+        "harris_corner_2": {
+            "name": "harris",
+            "tunable_parameters": [
+                "window_half_size", "threshold"
+            ],
+            "set_parameters": {
+            }
+        },
+        "image_stitching": {
+            "name": "image_stitching",
+            "tunable_parameters": [
+                "no_correspondence"
+            ],
+            "set_parameters": {}
+        }
+    },
+    "connections": [
+        {
+            "source": "INPUT.image_1",
+            "sink": "sobel_horizontal_1.input_image"
+        },
+        {
+            "source": "INPUT.image_2",
+            "sink": "sobel_horizontal_2.input_image"
+        },
+        {
+            "source": "INPUT.image_1",
+            "sink": "sobel_vertical_1.input_image"
+        },
+        {
+            "source": "INPUT.image_2",
+            "sink": "sobel_vertical_2.input_image"
+        },
+        {
+            "source": "sobel_horizontal_1.filtered_matrix",
+            "sink": "harris_corner_1.sobel_horizontal_result"
+        },
+        {
+            "source": "sobel_horizontal_2.filtered_matrix",
+            "sink": "harris_corner_2.sobel_horizontal_result"
+        },
+        {
+            "source": "sobel_vertical_1.filtered_matrix",
+            "sink": "harris_corner_1.sobel_vertical_result"
+        },
+        {
+            "source": "sobel_vertical_2.filtered_matrix",
+            "sink": "harris_corner_2.sobel_vertical_result"
+        },
+        {
+            "source": "harris_corner_1.corner_locations",
+            "sink": "image_stitching.corner_locs_1"
+        },
+        {
+            "source": "harris_corner_2.corner_locations",
+            "sink": "image_stitching.corner_locs_2"
+        },
+        {
+            "source": "INPUT.image_1",
+            "sink": "image_stitching.image_1"
+        },
+        {
+            "source": "INPUT.image_2",
+            "sink": "image_stitching.image_2"
+        },
+        {
+            "source": "image_stitching.stitched_image",
+            "sink": "OUTPUT.stitched_image"
+        }
+    ]
+}
