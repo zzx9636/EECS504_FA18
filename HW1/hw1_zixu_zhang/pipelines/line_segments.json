@@ -1,0 +1,27 @@
+{
+    "info": {
+        "name": "line_segments",
+        "type": "eta.core.types.Pipeline",
+        "version": "0.1.0",
+        "description": "A pipeline for finding the line segments in an image."
+    },
+    "inputs": ["image_edges"],
+    "outputs": ["line_segment_output"],
+    "modules": {
+        "find_line_segments": {
+            "name": "find_line_segments",
+            "tunable_parameters": [],
+            "set_parameters": {}
+        }
+    },
+    "connections": [
+        {
+            "source": "INPUT.image_edges",
+            "sink": "find_line_segments.input_image"
+        },
+        {
+            "source": "find_line_segments.line_segments",
+            "sink": "OUTPUT.line_segment_output"
+        }
+    ]
+}

@@ -1,0 +1,32 @@
+{
+    "info": {
+        "name": "calculate_potts_energy",
+        "type": "eta.core.types.Module",
+        "version": "0.1.0",
+        "description": "A module for calculating the Pott's Energy of an image",
+        "exe": "calculate_potts_energy.py"
+    },
+    "inputs": [
+        {
+            "name": "x_derivative_path",
+            "type": "eta.core.types.NpzFile",
+            "description": "The result of convolving the original image with the \"x_derivative\" kernel",
+            "required": true
+        },
+        {
+            "name": "y_derivative_path",
+            "type": "eta.core.types.NpzFile",
+            "description": "The result of convolving the original image with the \"y_derivative\" kernel",
+            "required": true
+        }
+    ],
+    "outputs": [
+        {
+            "name": "potts_energy_out",
+            "type": "eta.core.types.JSONFile",
+            "description": "The Pott's Energy of the image, written to a JSON file",
+            "required": true
+        }
+    ],
+    "parameters": []
+}

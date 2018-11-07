@@ -1,0 +1,10 @@
+{
+    "pipeline": "potts_energy_gaussian",
+    "inputs": {
+        "input_image": "data/Michigan_letter.jpg"
+    },
+    "outputs": {
+        "potts_energy_output": "out/output_energy_gaussian.json"
+    },
+    "parameters": {}
+}

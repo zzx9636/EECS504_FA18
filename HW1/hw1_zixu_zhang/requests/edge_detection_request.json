@@ -1,0 +1,10 @@
+{
+    "pipeline": "edge_detection",
+    "inputs": {
+        "input_image": "data/Canny_input.jpg"
+    },
+    "outputs": {
+        "edges_only_image": "out/Canny_input_edges.jpg"
+    },
+    "parameters": {}
+}

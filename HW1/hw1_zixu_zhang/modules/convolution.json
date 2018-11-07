@@ -1,0 +1,55 @@
+{
+    "info": {
+        "name": "convolution",
+        "type": "eta.core.types.Module",
+        "version": "0.1.0",
+        "description": "A module for convolving two 2d images",
+        "exe": "convolution.py"
+    },
+    "inputs": [
+        {
+            "name": "input_image",
+            "type": "eta.core.types.Image",
+            "description": "The input image",
+            "required": true
+        }
+    ],
+    "outputs": [
+        {
+            "name": "filtered_image",
+            "type": "eta.core.types.ImageFile",
+            "description": "The result of convolution",
+            "required": false
+        },
+        {
+            "name": "filtered_matrix",
+            "type": "eta.core.types.NpzFile",
+            "description": "The result of convolution in matrix",
+            "required": false
+        }
+
+    ],
+    "parameters": [
+        {
+            "name": "kernel_type",
+            "type": "eta.core.types.String",
+            "description": "The type of kernel used for convolution.",
+            "required": false,
+            "default": "x_derivative"
+        },
+        {
+            "name": "image_type",
+            "type": "eta.core.types.String",
+            "description": "The format required for convolution with the specified kernel. The image type must be grayscale when applying the Sobel kernel.",
+            "required": false,
+            "default": "color"
+        },
+        {
+            "name": "gaussian_sigma",
+            "type": "eta.core.types.Number",
+            "description": "The sigma used when creating the gaussian kernel",
+            "required": false,
+            "default": 1
+        }
+    ]
+}

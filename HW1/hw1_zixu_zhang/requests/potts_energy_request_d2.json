@@ -1,0 +1,10 @@
+{
+    "pipeline": "potts_energy",
+    "inputs": {
+        "input_image": "data/img_2.jpg"
+    },
+    "outputs": {
+        "potts_energy_output": "out/output_energy_d2.json"
+    },
+    "parameters": {}
+}

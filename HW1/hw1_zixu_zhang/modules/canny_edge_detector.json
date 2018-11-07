@@ -1,0 +1,63 @@
+{
+    "info": {
+        "name": "canny_edge_detector",
+        "type": "eta.core.types.Module",
+        "version": "0.1.0",
+        "description": "A module for determining the edges of an image using the Canny Edge Detector",
+        "exe": "canny_edge_detector.py"
+    },
+    "inputs": [
+        {
+            "name": "input_image",
+            "type": "eta.core.types.Image",
+            "description": "the input image",
+            "required": true
+        },
+        {
+            "name": "sobel_horizontal_result",
+            "type": "eta.core.types.NpzFile",
+            "description": "The result of convolving the original image with the \"sobel_horizontal\" kernel. This will give the value of Gx (the gradient in the x direction).",
+            "required": true
+        },
+        {
+            "name": "sobel_vertical_result",
+            "type": "eta.core.types.NpzFile",
+            "description": "The result of convolving the original image with the \"sobel_vertical\" kernel. This will give the value of Gy (the gradient in the y direction).",
+            "required": true
+        }
+    ],
+    "outputs": [
+        {
+            "name": "image_edges",
+            "type": "eta.core.types.ImageFile",
+            "description": "A new image displaying the edges of the original image.",
+            "required": true
+        },
+        {
+            "name": "gradient_orientation",
+            "type": "eta.core.types.NpzFile",
+            "description": "An image displaying the gradient orientation for each pixel in the input image",
+            "required": false
+        },
+        {
+            "name": "gradient_intensity",
+            "type": "eta.core.types.NpzFile",
+            "description": "An image displaying the gradient intensity for each pixel in the input image",
+            "required": false
+        }
+    ],
+    "parameters": [
+        {
+            "name": "high_threshold",
+            "type": "eta.core.types.Number",
+            "description": "The upper threshold to use during double thresholding",
+            "required": true
+        },
+        {
+            "name": "low_threshold",
+            "type": "eta.core.types.Number",
+            "description": "The lower threshold to use during double thresholding",
+            "required": true
+        }
+    ]
+}

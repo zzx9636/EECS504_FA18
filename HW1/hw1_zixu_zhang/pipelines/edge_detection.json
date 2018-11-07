@@ -1,0 +1,83 @@
+{
+    "info": {
+        "name": "edge_detection",
+        "type": "eta.core.types.Pipeline",
+        "version": "0.1.0",
+        "description": "A pipeline for determining the edges of an image and grouping them into line segments"
+    },
+    "inputs": ["input_image"],
+    "outputs": ["edges_only_image"],
+    "modules": {
+        "gaussian_convolution": {
+            "name": "convolution",
+            "tunable_parameters": [
+                "kernel_type", "image_type", "gaussian_sigma"
+            ],
+            "set_parameters": {
+                "kernel_type": "gaussian",
+                "image_type": "grayscale",
+                "gaussian_sigma": 0.35
+            }
+        },
+        "sobel_horizontal": {
+            "name": "convolution",
+            "tunable_parameters": [
+                "kernel_type", "image_type"
+            ],
+            "set_parameters": {
+                "kernel_type": "sobel_horizontal",
+                "image_type": "grayscale"
+            }
+        },
+        "sobel_vertical": {
+            "name": "convolution",
+            "tunable_parameters": [
+                "kernel_type", "image_type"
+            ],
+            "set_parameters": {
+                "kernel_type": "sobel_vertical",
+                "image_type": "grayscale"
+            }
+        },
+        "canny_edge_detector": {
+            "name": "canny_edge_detector",
+            "tunable_parameters": [
+                "low_threshold", "high_threshold"
+            ],
+            "set_parameters": {
+                "low_threshold": 31,
+                "high_threshold": 91 
+            }
+        }
+    },
+    "connections": [
+        {
+            "source": "INPUT.input_image",
+            "sink": "gaussian_convolution.input_image"
+        },
+        {
+            "source": "gaussian_convolution.filtered_image",
+            "sink": "sobel_horizontal.input_image"
+        },
+        {
+            "source": "gaussian_convolution.filtered_image",
+            "sink": "sobel_vertical.input_image"
+        },
+        {
+            "source": "gaussian_convolution.filtered_image",
+            "sink": "canny_edge_detector.input_image"
+        },
+        {
+            "source": "sobel_horizontal.filtered_matrix",
+            "sink": "canny_edge_detector.sobel_horizontal_result"
+        },
+        {
+            "source": "sobel_vertical.filtered_matrix",
+            "sink": "canny_edge_detector.sobel_vertical_result"
+        },
+        {
+            "source": "canny_edge_detector.image_edges",
+            "sink": "OUTPUT.edges_only_image"
+        }    
+    ]
+}

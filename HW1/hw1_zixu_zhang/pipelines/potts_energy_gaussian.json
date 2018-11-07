@@ -1,0 +1,73 @@
+{
+    "info": {
+        "name": "potts_energy_gaussian",
+        "type": "eta.core.types.Pipeline",
+        "version": "0.1.0",
+        "description": "A pipeline for calculating the Pott's Energy of an image after convolving with a Gaussian kernel."
+    },
+    "inputs": ["input_image"],
+    "outputs": ["potts_energy_output"],
+    "modules": {
+        "gaussian_convolution": {
+            "name": "convolution",
+            "tunable_parameters": [
+                "kernel_type", "image_type", "gaussian_sigma"
+            ],
+            "set_parameters": {
+                "kernel_type": "gaussian",
+                "image_type": "grayscale"
+            }
+        },
+        "x_derivative_convolution": {
+            "name": "convolution",
+            "tunable_parameters": [
+                "kernel_type", "image_type"
+            ],
+            "set_parameters": {
+                "kernel_type": "x_derivative",
+                "image_type": "grayscale"
+            }
+        },
+        "y_derivative_convolution": {
+            "name": "convolution",
+            "tunable_parameters": [
+                "kernel_type", "image_type"
+            ],
+            "set_parameters": {
+                "kernel_type": "y_derivative",
+                "image_type": "grayscale"
+            }
+        },
+        "calculate_potts_energy": {
+            "name": "calculate_potts_energy",
+            "tunable_parameters": [],
+            "set_parameters": {}
+        }
+    },
+    "connections": [
+        {
+            "source": "INPUT.input_image",
+            "sink": "gaussian_convolution.input_image"
+        },
+        {
+            "source": "gaussian_convolution.filtered_image",
+            "sink": "x_derivative_convolution.input_image"
+        },
+        {
+            "source": "gaussian_convolution.filtered_image",
+            "sink": "y_derivative_convolution.input_image"
+        },
+        {
+            "source": "x_derivative_convolution.filtered_matrix",
+            "sink": "calculate_potts_energy.x_derivative_path"
+        },
+        {
+            "source": "y_derivative_convolution.filtered_matrix",
+            "sink": "calculate_potts_energy.y_derivative_path"
+        },
+        {
+            "source": "calculate_potts_energy.potts_energy_out",
+            "sink": "OUTPUT.potts_energy_output"
+        }
+    ]
+}

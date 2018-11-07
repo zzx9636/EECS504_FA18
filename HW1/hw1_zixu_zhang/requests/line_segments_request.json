@@ -1,0 +1,10 @@
+{
+    "pipeline": "line_segments",
+    "inputs": {
+        "image_edges": "out/Canny_input_edges.jpg"
+    },
+    "outputs": {
+        "line_segment_output": "out/output_points.json"
+    },
+    "parameters": {}
+}

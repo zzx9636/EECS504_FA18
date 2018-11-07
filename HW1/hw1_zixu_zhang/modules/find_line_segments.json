@@ -1,0 +1,44 @@
+{
+    "info": {
+        "name": "find_line_segments",
+        "type": "eta.core.types.Module",
+        "version": "0.1.0",
+        "description": "A module for finding the line segments of an image, given the output\nof Canny Edge Detection",
+        "exe": "find_line_segments.py"
+    },
+    "inputs": [
+        {
+            "name": "input_image",
+            "type": "eta.core.types.Image",
+            "description": "The input image",
+            "required": true
+        },
+        {
+            "name": "canny_edge_output",
+            "type": "eta.core.types.Image",
+            "description": "The output of canny edge detection",
+            "required": false
+        },
+        {
+            "name": "gradient_intensity",
+            "type": "eta.core.types.Image",
+            "description": "The gradient intensity for each pixel in the input image",
+            "required": false
+        },
+        {
+            "name": "gradient_orientation",
+            "type": "eta.core.types.NpzFile",
+            "description": "The gradient orientation for each pixel in the input image",
+            "required": false
+        }
+    ],
+    "outputs": [
+        {
+            "name": "line_segments",
+            "type": "eta.core.types.JSONFile",
+            "description": "A list of coordinate tuples, specifying the start and end of each line segment in the image",
+            "required": false
+        }
+    ],
+    "parameters": []
+}

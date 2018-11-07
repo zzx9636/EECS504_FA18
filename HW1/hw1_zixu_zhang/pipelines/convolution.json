@@ -1,0 +1,29 @@
+{
+    "info": {
+        "name": "convolution",
+        "type": "eta.core.types.Pipeline",
+        "version": "0.1.0",
+        "description": "A pipeline for performing convolution on an image"
+    },
+    "inputs": ["input_image"],
+    "outputs": ["filtered_image"],
+    "modules": {
+        "convolution_gaussian": {
+            "name": "convolution",
+            "tunable_parameters": [
+                "kernel_type", "image_type"
+            ],
+            "set_parameters": {}
+        }
+    },
+    "connections": [
+        {
+            "source": "INPUT.input_image",
+            "sink": "convolution_gaussian.input_image"
+        },
+        {
+            "source": "convolution_gaussian.filtered_image",
+            "sink": "OUTPUT.filtered_image"
+        }
+    ]
+}
