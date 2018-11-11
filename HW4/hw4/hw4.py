@@ -36,7 +36,7 @@ def display_save(img, S, img_tag):
     plt.axis('off')
     plt.title("superpixel overlay")
     #plt.show()
-    plt.savefig(img_tag + '_Superpixels..png')
+    plt.savefig(img_tag + '_Superpixels.png')
     plt.close()
 
 
@@ -201,17 +201,20 @@ def histvec(img,mask,b):
     You MAY loop over the channels.
     
     '''
-    img_in_SP = img[mask,:].astype(dtype=np.float)
+    img_in_SP = img[mask,:].astype(dtype=np.int64)
     total_location = img_in_SP.shape[0]
+    #print(total_location)
     hist_vector = np.zeros(3*b)
-    ub_unit = 255.0/b
+    ub_unit = 256.0/b
     for i in range(b):
-        ub_cur = np.ceil((i+1)*ub_unit)
+        ub_cur = ((i+1)*ub_unit)
+        #print(ub_cur)
         for j in range(3):
             cur_idx = np.argwhere(img_in_SP[:,j]<=ub_cur)
             hist_vector[j*b+i]+=len(cur_idx)
             img_in_SP[cur_idx,j] = 300
     '''Normalize Histogram'''
+    #print(hist_vector)
     hist_vector=hist_vector/total_location    
     
     return hist_vector
@@ -517,11 +520,13 @@ def example(file_name):
 def main():
     # These are the functions to do Question 1 Part 1-4. 
     q1()
+    
     q2()
     q3()
     namelist = ['flower1.jpg','porch1.png','flag1.jpg']
     for file_name in namelist:
         example(file_name)
+    
     
 
 if(__name__=="__main__"):
