@@ -35,8 +35,8 @@ def display_save(img, S, img_tag):
     plt.imshow(out2)
     plt.axis('off')
     plt.title("superpixel overlay")
-    
-    plt.savefig(img_tag + '_Superpixels.png')
+    #plt.show()
+    plt.savefig(img_tag + '_Superpixels..png')
     plt.close()
 
 
@@ -131,6 +131,24 @@ def bfs_augment_path(start, target, current_flow, capacity, n):
 
     return augment_path
 
+def bfs_residual_reachable(start, current_flow, capacity):
+
+    num_node = capacity.shape[0]-2
+    q = deque([])
+    q.append(start)
+    node_hist = np.zeros(num_node,dtype=bool)
+    visited_node = []
+
+    while len(q) != 0:
+        u = q.popleft()
+        for i in range(num_node):
+            if~node_hist[i]:
+                if current_flow[u,i]<capacity[u,i]:
+                    node_hist[i]=True
+                    visited_node.append(i)
+                    q.append(i) 
+    return  visited_node   
+
 
 def ff_max_flow(source, sink, capacity, nodes_number):
     # Function to implement Ford-Fulkerson Algorithm
@@ -183,7 +201,21 @@ def histvec(img,mask,b):
     You MAY loop over the channels.
     
     '''
-    # @TODO
+    img_in_SP = img[mask,:].astype(dtype=np.float)
+    total_location = img_in_SP.shape[0]
+    hist_vector = np.zeros(3*b)
+    ub_unit = 255.0/b
+    for i in range(b):
+        ub_cur = np.ceil((i+1)*ub_unit)
+        for j in range(3):
+            cur_idx = np.argwhere(img_in_SP[:,j]<=ub_cur)
+            hist_vector[j*b+i]+=len(cur_idx)
+            img_in_SP[cur_idx,j] = 300
+    '''Normalize Histogram'''
+    hist_vector=hist_vector/total_location    
+    
+    return hist_vector
+    
     
 
 def seg_neighbor(svMap):
@@ -209,8 +241,32 @@ def seg_neighbor(svMap):
     segmentList = np.unique(svMap)
     segmentNum = segmentList.shape[0]
     # FILL IN THE CODE HERE to calculate the adjacency
+    Bmap = np.zeros([segmentNum, segmentNum])
+    height,width = svMap.shape
+    for i in range(height):
+        for j in range(width):
+            '''check eight connectivity'''
+            y_u = min(i+1, height-1) 
+            x_u = min(j+1, width-1)
+            x_l = max(j-1, 0)
+            ''' check lower'''
+            if svMap[i,j] != svMap[y_u,j]: 
+                Bmap[svMap[i,j],svMap[y_u,j]] = 1
+                Bmap[svMap[y_u,j],svMap[i,j]] = 1
+            ''' check left'''
+            if svMap[i,j] != svMap[i,x_u]:
+                Bmap[svMap[i,j],svMap[i,x_u]] = 1
+                Bmap[svMap[i,x_u],svMap[i,j]] = 1
+            ''' check lower left'''
+            if svMap[i,j] != svMap[y_u,x_u]:
+                Bmap[svMap[i,j],svMap[y_u,x_u]] = 1
+                Bmap[svMap[y_u,x_u],svMap[i,j]] = 1
+            ''' check lower right'''
+            if svMap[i,j] != svMap[y_u,x_l]:
+                Bmap[svMap[i,j],svMap[y_u,x_l]] = 1
+                Bmap[svMap[y_u,x_l],svMap[i,j]] = 1
 
-    # @TODO
+    return Bmap
     
 def hist_intersect(a, b):
     return np.sum(np.minimum(a,b))
@@ -239,7 +295,7 @@ def graphcut(S,C,hist_values, keyindex):
       source node and hence in the same segment as the keyindex.
         B has 0's for those nodes connected to the sink.
     '''
-
+    
     #Compute basic adjacency information of superpixels
     adjacency = seg_neighbor(S)
     '''
@@ -255,7 +311,10 @@ def graphcut(S,C,hist_values, keyindex):
     capacity = np.zeros((k+2,k+2)) # initialize the zero-valued capacity matrix
     source = k # set the index of the source node
     sink = k+1 # set the index of the sink node
-
+    capacity[k+1,keyindex]=0
+    capacity[keyindex,k+1]=0
+    capacity[k,keyindex]=3
+    capacity[keyindex,k]=3
     '''
     This is a single planar graph with an extra source and sink.
 
@@ -277,11 +336,25 @@ def graphcut(S,C,hist_values, keyindex):
       adjacent superpixels.
     '''
     # FILL IN CODE HERE to generate the capacity matrix using the description above.
-
-    
-
-
-
+    for i in range(k):
+        for j in range((i+1),k):
+            His_sim_cur = hist_intersect(hist_values[i],hist_values[j])
+            dis_cen = np.array(C[i])-np.array(C[j])
+            Spa_sim_cur = np.exp(-1*np.linalg.norm(dis_cen, ord=2)/dnorm)
+            Capa_cur = His_sim_cur*Spa_sim_cur
+            if adjacency[i,j]==1:
+                capacity[i,j] = 0.25*Capa_cur
+                capacity[j,i] = 0.25*Capa_cur          
+            if i==keyindex:
+                capacity[k,j] = Capa_cur
+                capacity[j,k] = Capa_cur
+                capacity[k+1,j] = 3-Capa_cur
+                capacity[j,k+1] = 3-Capa_cur
+            elif j==keyindex:
+                capacity[k,i] = Capa_cur
+                capacity[i,k] = Capa_cur
+                capacity[k+1,i] = 3-Capa_cur
+                capacity[i,k+1] = 3-Capa_cur
 
     #Compute the cut (this code is provided to you)
     _,current_flow = ff_max_flow(source, sink, capacity, k+2)
@@ -301,7 +374,15 @@ def graphcut(S,C,hist_values, keyindex):
       source in the graph with residual capacity (original capacity - current flow) 
       being positive.
     '''
-    #  FILL IN CODE HERE to read the cut into B
+    reachable_node = bfs_residual_reachable(source, current_flow, capacity)
+    
+
+    '''create mask'''
+    B = np.zeros_like(S)
+    for i in range(len(reachable_node)):
+        cur_idx = (S==reachable_node[i])
+        B[cur_idx] = 1
+    return B
    
 
 def q1():
@@ -309,10 +390,10 @@ def q1():
     #first compute the superpixels on the image we loaded
     S, C = get_superpixel(img,230)
     display_save(img,S,'q1')
-
     # compute histograms on a superpixel
 
     v = histvec(img, S==115,10)
+   
     # plot and compare
     plt.figure()
     plt.subplot(131)
@@ -330,10 +411,8 @@ def q1():
     #plt.show()
     plt.savefig('q1_result.png')
     plt.close()
-
-
-
-
+    
+    
 def q2():
     img = etai.read('porch1.png')[:,:,:3]
     #first compute the superpixels on the image we loaded
@@ -354,6 +433,7 @@ def q2():
     plt.subplot(133)
     plt.imshow(student_A-solution_A)
     plt.title("Error")
+    #plt.show()
     plt.savefig('q2_result.png')
     plt.close()
 
@@ -378,6 +458,7 @@ def q3():
     output_student = graphcut(S,C,hist_values, keyindex)
     # plot and compare
     solution_output =np.load("solution_q3_mask.npy")
+
     plt.figure()
     plt.subplot(131)
     plt.imshow(output_student)
@@ -388,19 +469,19 @@ def q3():
     plt.subplot(133)
     plt.imshow(output_student-solution_output)
     plt.title("Error")
+    #plt.show()
     plt.savefig('q3_result.png')
     plt.close()
 
 
-def example():
+def example(file_name):
     # Uncomment the images according to the question
-    img = etai.read('flower1.jpg')
-    #img = etai.read('porch1.png')[:,:,:3]
-    #img = etai.read('flag1.jpg')
+    img = etai.read(file_name)[:,:,:3]
+    file_name_w_ext = file_name.split('.')[0]
     
     # first compute the superpixels on the image we loaded
     S, C = get_superpixel(img,180)
-    display_save(img,S,'example')
+    display_save(img,S,file_name_w_ext)
     # next compute the feature reduction for the segmentation (histograms)
     hist_values = img_reduce(img,S,C)
     print('Please click on the superpixel you want to be the key \n on which to base the foreground extraction.\n\n')
@@ -428,7 +509,9 @@ def example():
     out_img[output_student != 1] =255
     plt.imshow(mark_boundaries(out_img,S))
     plt.title("Superpixels and fg")
-    plt.savefig('example_result.png')
+    #plt.show()
+    plt.savefig(file_name_w_ext+'_result.png')
+    plt.close()
 
 
 def main():
@@ -436,8 +519,10 @@ def main():
     q1()
     q2()
     q3()
-    example()
-
+    namelist = ['flower1.jpg','porch1.png','flag1.jpg']
+    for file_name in namelist:
+        example(file_name)
+    
 
 if(__name__=="__main__"):
     main()
