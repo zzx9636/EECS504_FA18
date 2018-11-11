@@ -196,27 +196,28 @@ def histvec(img,mask,b):
     
     normalize the histogram of each channel so that it sums to 1.
     Function to take a superpixel set and a keyindex and convert to a 
-%  foreground/background segmentation.
+    foreground/background segmentation.
     You CAN use the cv2 functions.
     You MAY loop over the channels.
     
     '''
     img_in_SP = img[mask,:].astype(dtype=np.int64)
     total_location = img_in_SP.shape[0]
-    #print(total_location)
+    
     hist_vector = np.zeros(3*b)
     ub_unit = 256.0/b
+
+    '''loop through all bins'''
     for i in range(b):
         ub_cur = ((i+1)*ub_unit)
-        #print(ub_cur)
+        '''loop through rgb channels'''
         for j in range(3):
             cur_idx = np.argwhere(img_in_SP[:,j]<=ub_cur)
             hist_vector[j*b+i]+=len(cur_idx)
             img_in_SP[cur_idx,j] = 300
+
     '''Normalize Histogram'''
-    #print(hist_vector)
     hist_vector=hist_vector/total_location    
-    
     return hist_vector
     
     
@@ -270,11 +271,16 @@ def seg_neighbor(svMap):
                 Bmap[svMap[y_u,x_l],svMap[i,j]] = 1
 
     return Bmap
+
+def ave_deg(adj_mat):
+    total_deg = np.sum(adj_mat)
+    num_nodes = adj_mat.shape[0]
+    return total_deg/num_nodes
     
 def hist_intersect(a, b):
     return np.sum(np.minimum(a,b))
 
-def graphcut(S,C,hist_values, keyindex):
+def graphcut(S,C,hist_values, keyindex, plt_img=False):
     '''
     Function to take a superpixel set and a keyindex and convert to a 
     foreground/background segmentation.
@@ -314,10 +320,7 @@ def graphcut(S,C,hist_values, keyindex):
     capacity = np.zeros((k+2,k+2)) # initialize the zero-valued capacity matrix
     source = k # set the index of the source node
     sink = k+1 # set the index of the sink node
-    capacity[k+1,keyindex]=0
-    capacity[keyindex,k+1]=0
-    capacity[k,keyindex]=3
-    capacity[keyindex,k]=3
+    
     '''
     This is a single planar graph with an extra source and sink.
 
@@ -339,6 +342,10 @@ def graphcut(S,C,hist_values, keyindex):
       adjacent superpixels.
     '''
     # FILL IN CODE HERE to generate the capacity matrix using the description above.
+    capacity[k+1,keyindex]=0
+    capacity[keyindex,k+1]=0
+    capacity[k,keyindex]=3
+    capacity[keyindex,k]=3
     for i in range(k):
         for j in range((i+1),k):
             His_sim_cur = hist_intersect(hist_values[i],hist_values[j])
@@ -359,6 +366,16 @@ def graphcut(S,C,hist_values, keyindex):
                 capacity[k+1,i] = 3-Capa_cur
                 capacity[i,k+1] = 3-Capa_cur
 
+    if plt_img:
+        plt.figure()
+        plt.subplot(121)
+        plt.imshow(adjacency)
+        plt.title("Adjacency Matrix")
+        plt.subplot(122)
+        plt.imshow(capacity)
+        plt.title("Capacity Matrix")
+        plt.show()
+        plt.close()
     #Compute the cut (this code is provided to you)
     _,current_flow = ff_max_flow(source, sink, capacity, k+2)
     '''
@@ -379,7 +396,6 @@ def graphcut(S,C,hist_values, keyindex):
     '''
     reachable_node = bfs_residual_reachable(source, current_flow, capacity)
     
-
     '''create mask'''
     B = np.zeros_like(S)
     for i in range(len(reachable_node)):
@@ -396,6 +412,14 @@ def q1():
     # compute histograms on a superpixel
 
     v = histvec(img, S==115,10)
+
+    # show mask section
+    img2 = img.copy()
+    img2[S!=115] = 0
+    plt.figure()
+    plt.imshow(img2)
+    plt.savefig('q1_mask.png')
+    plt.close()
    
     # plot and compare
     plt.figure()
@@ -423,7 +447,7 @@ def q2():
     display_save(img,S,'q2')
     #compute adjacency matrix
     student_A = seg_neighbor(S)
-
+    print(ave_deg(student_A))
     solution_A = np.load("Adjacency.npy")
     # plot and compare
     plt.figure()
@@ -458,7 +482,7 @@ def q3():
         keyindex = S[y,x]
    
     # Perform graph-cut
-    output_student = graphcut(S,C,hist_values, keyindex)
+    output_student = graphcut(S,C,hist_values, keyindex, False)
     # plot and compare
     solution_output =np.load("solution_q3_mask.npy")
 
@@ -519,14 +543,17 @@ def example(file_name):
 
 def main():
     # These are the functions to do Question 1 Part 1-4. 
+    '''
     q1()
     
     q2()
+    '''
     q3()
+    '''
     namelist = ['flower1.jpg','porch1.png','flag1.jpg']
     for file_name in namelist:
         example(file_name)
-    
+    '''
     
 
 if(__name__=="__main__"):

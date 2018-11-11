@@ -1,0 +1,205 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{gensymb}
+\usepackage{float}
+\usepackage[top=1.25in, bottom=1in, left=1in, right=1in]{geometry}
+\usepackage{graphicx}
+\usepackage[export]{adjustbox}
+\usepackage{rotating}
+\usepackage{multirow}
+\usepackage{latexsym}
+\usepackage{amssymb}
+\usepackage{longtable}
+\usepackage{fancyhdr}
+\usepackage{color}
+\usepackage{subcaption}
+\usepackage{listings}
+\usepackage{setspace}
+\definecolor{Code}{rgb}{0,0,0}
+\definecolor{Decorators}{rgb}{0.5,0.5,0.5}
+\definecolor{Numbers}{rgb}{0.5,0,0}
+\definecolor{MatchingBrackets}{rgb}{0.25,0.5,0.5}
+\definecolor{Keywords}{rgb}{0,0,1}
+\definecolor{self}{rgb}{0,0,0}
+\definecolor{Strings}{rgb}{0,0.63,0}
+\definecolor{Comments}{rgb}{0,0.63,1}
+\definecolor{Backquotes}{rgb}{0,0,0}
+\definecolor{Classname}{rgb}{0,0,0}
+\definecolor{FunctionName}{rgb}{0,0,0}
+\definecolor{Operators}{rgb}{0,0,0}
+\definecolor{Background}{rgb}{0.98,0.98,0.98}
+\lstdefinelanguage{Python}{
+	numbers=left,
+	numberstyle=\tiny ,
+	numbersep=1em,
+	xleftmargin=1em,
+	framextopmargin=2em,
+	framexbottommargin=2em,
+	showspaces=false,
+	showtabs=false,
+	showstringspaces=false,
+	frame=l,
+	tabsize=4,
+	% Basic
+	basicstyle=\ttfamily\small\setstretch{1},
+	%backgroundcolor=\color{Background},
+	% Comments
+	commentstyle=\color{Comments}\slshape,
+	% Strings
+	stringstyle=\color{Strings},
+	morecomment=[s][\color{Strings}]{"""}{"""},
+	morecomment=[s][\color{Strings}]{'''}{'''},
+	% keywords
+	morekeywords={import,from,class,def,for,while,if,is,in,elif,else,not,and,or,print,break,continue,return,True,False,None,access,as,,del,except,exec,finally,global,import,lambda,pass,print,raise,try,assert},
+	keywordstyle={\color{Keywords}\bfseries},
+	% additional keywords
+	morekeywords={[2]@invariant,pylab,numpy,np,scipy},
+	keywordstyle={[2]\color{Decorators}\slshape},
+	emph={self},
+	emphstyle={\color{self}\slshape},
+	breaklines=true,
+	%
+}
+
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}             
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[RE,RO]{Zixu Zhang\\zixu@umich.edu}
+\fancyhead[LE,LO]{EECS 504\\FALL 2018 }
+\fancyhead[C]{Homework 4\textsl{\textsl{}}}
+
+\begin{document}
+	\begin{enumerate}
+		\item Out put images  \texttt{q1\_Superpixels.png} and \texttt{q1\_result.png} are shown in Figure \ref{fig:q1_1} and \ref{fig:q1_2} correspondingly. This super-pixel covers a part of two yellow peppers of the lower middle of the input image. 
+		\begin{figure}[H]
+			\centering\adjincludegraphics[width=\textwidth,trim={{.08\width} {.38\height} {.08\width} {.36\height}},clip,]{q1_Superpixels.eps}
+			\caption{Superpixels of Question 1}
+			\label{fig:q1_1}
+		\end{figure}
+		\begin{figure}[H]
+			\centering\adjincludegraphics[width=\textwidth,trim={60 20 80 20},clip,]{q1_result.eps}
+			\caption{Results of Question 1}
+			\label{fig:q1_2}
+		\end{figure}
+		
+		
+	\item Out put images  \texttt{q2\_Superpixels.png} and \texttt{q2\_result.png} are shown in Figure \ref{fig:q2_1} and \ref{fig:q2_2} correspondingly. We find the average node degree is $5.33766$ for the adjacency matrix in this problem. The adjacency graph is not perfectly banded diagonal matrix because superpixels in images have various sizes. We can see that some superpixels are cover a lot of space along the $y$ direction, while narrow along $x$ direction. In this way, it is able to adjunct to some superpixel, whose centroid is far from its centroid. Moreover, some superpixel are relatively small and only adjunct to four superpixels around it.  
+	\begin{figure}[H]
+		\centering\adjincludegraphics[width=\textwidth,trim={{.08\width} {.38\height} {.08\width} {.36\height}},clip,]{q2_Superpixels.eps}
+		\caption{Superpixels of Question 2}
+		\label{fig:q2_1}
+	\end{figure}
+	\begin{figure}[H]
+		\centering\adjincludegraphics[width=\textwidth,trim={{.05\width} {.3\height} {.08\width} {.3\height}},clip,]{q2_result.eps}
+		\caption{Results of Question 2}
+		\label{fig:q2_2}
+	\end{figure}
+
+
+	\item Out put images  \texttt{q3\_Superpixels.png} and \texttt{q3\_result.png} are shown in Figure \ref{fig:q3_1} and \ref{fig:q3_2} correspondingly.
+	\begin{figure}[H]
+		\centering\adjincludegraphics[width=\textwidth,trim={{.08\width} {.38\height} {.08\width} {.36\height}},clip,]{q3_Superpixels.eps}
+		\caption{Superpixels of Question 3}
+		\label{fig:q3_1}
+	\end{figure}
+	\begin{figure}[H]
+		\centering\adjincludegraphics[width=\textwidth,trim={{.05\width} {.34\height} {.08\width} {.35\height}},clip,]{q3_result.eps}
+		\caption{Results of Question 3}
+		\label{fig:q3_2}
+	\end{figure}
+	\end{enumerate}
+\pagebreak
+\section*{Appendix}
+\subsection*{Q1:}
+\begin{lstlisting}[language=python]
+def histvec(img,mask,b):
+	'''
+	Function to find the color histogram of the image.
+	
+	Args:
+	-----
+	img: input image
+	mask: Super pixel mask. Each pixel location will have the superpixel label corresponding to it
+	b: number of bins in the histogram
+	Return:
+	-------
+	hist_vector: 1-D vector having the histogram of all three channels appended
+	'''
+	
+	img_in_SP = img[mask,:].astype(dtype=np.int64)
+	total_location = img_in_SP.shape[0]
+	
+	hist_vector = np.zeros(3*b)
+	ub_unit = 256.0/b
+	
+	'''loop through all bins'''
+	for i in range(b):
+		ub_cur = ((i+1)*ub_unit)
+		'''loop through rgb channels'''
+		for j in range(3):
+			cur_idx = np.argwhere(img_in_SP[:,j]<=ub_cur)
+			hist_vector[j*b+i]+=len(cur_idx)
+			img_in_SP[cur_idx,j] = 300
+	
+	'''Normalize Histogram'''
+	hist_vector=hist_vector/total_location    
+	return hist_vector
+\end{lstlisting}
+\pagebreak
+\subsection*{Q2:}
+\begin{lstlisting}[language=Python]
+def seg_neighbor(svMap):
+	'''
+	Function to find adjacency matrix
+	Args:
+	----
+	svMap: Super pixel mask. Each pixel location will have the superpixel label corresponding to it.  
+	
+	Return:
+	------
+	Bmap: a binary adjacency matrix NxN (N being the number of superpixels	in svMap). 
+	'''
+	segmentList = np.unique(svMap)
+	segmentNum = segmentList.shape[0]
+	# FILL IN THE CODE HERE to calculate the adjacency
+	Bmap = np.zeros([segmentNum, segmentNum])
+	height,width = svMap.shape
+	for i in range(height):
+		for j in range(width):
+			'''check eight connectivity'''
+			y_u = min(i+1, height-1) 
+			x_u = min(j+1, width-1)
+			x_l = max(j-1, 0)
+			''' check lower'''
+			if svMap[i,j] != svMap[y_u,j]: 
+				Bmap[svMap[i,j],svMap[y_u,j]] = 1
+				Bmap[svMap[y_u,j],svMap[i,j]] = 1
+			''' check left'''
+			if svMap[i,j] != svMap[i,x_u]:
+				Bmap[svMap[i,j],svMap[i,x_u]] = 1
+				Bmap[svMap[i,x_u],svMap[i,j]] = 1
+			''' check lower left'''
+			if svMap[i,j] != svMap[y_u,x_u]:
+				Bmap[svMap[i,j],svMap[y_u,x_u]] = 1
+				Bmap[svMap[y_u,x_u],svMap[i,j]] = 1
+			''' check lower right'''
+			if svMap[i,j] != svMap[y_u,x_l]:
+				Bmap[svMap[i,j],svMap[y_u,x_l]] = 1
+				Bmap[svMap[y_u,x_l],svMap[i,j]] = 1
+	return Bmap
+\end{lstlisting}
+\pagebreak	
+\begin{lstlisting}[language=Python]	
+def ave_deg(adj_mat):
+	'''
+	Calculate average node of an adj_mat
+	'''
+	total_deg = np.sum(adj_mat)
+	num_nodes = adj_mat.shape[0]
+	return total_deg/num_nodes
+\end{lstlisting}
+\vspace{3em}
+\subsection*{Q3:}
+\end{document}
