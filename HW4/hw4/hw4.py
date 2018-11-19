@@ -547,13 +547,14 @@ def main():
     q1()
     
     q2()
-    '''
+    
     q3()
-    '''
-    namelist = ['flower1.jpg','porch1.png','flag1.jpg']
+    
+    namelist = ['flower1.jpg','flag1.jpg','porch1.png','porch1.png']
     for file_name in namelist:
         example(file_name)
     '''
+    example('porch1.png')
     
 
 if(__name__=="__main__"):
