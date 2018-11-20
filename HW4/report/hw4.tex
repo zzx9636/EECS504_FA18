@@ -175,7 +175,7 @@
 		\caption{Results of Question 4c}
 		\label{fig:q4_4}
 	\end{figure}
-	
+	It is clear that we are not able to segment either of the baskets completely. This is caused by the perceptual similarity of two basket even if they are spatially away from each other. One way to solve this is to make sure that all segmented section are connected in adjacency graph. In this way we can separate two similar items but are not spatially connected.   
 	
 		
 	\end{enumerate}
@@ -272,4 +272,71 @@ def ave_deg(adj_mat):
 \end{lstlisting}
 \vspace{3em}
 \subsection*{Q3:}
+
+\begin{lstlisting}[language=Python]
+def graphcut(S,C,hist_values, keyindex, plt_img=False):
+	
+	dnorm = 2*np.square(np.prod(np.divide(S.shape,2)))
+	
+	k = len(C)
+	# Generate capacity matrix
+	capacity = np.zeros((k+2,k+2)) # initialize the zero-valued capacity matrix
+	source = k # set the index of the source node
+	sink = k+1 # set the index of the sink node
+	
+	# FILL IN CODE HERE to generate the capacity matrix using the description above.
+	capacity[k+1,keyindex]=0
+	capacity[keyindex,k+1]=0
+	capacity[k,keyindex]=3
+	capacity[keyindex,k]=3
+	for i in range(k):
+		for j in range((i+1),k):
+			His_sim_cur = hist_intersect(hist_values[i],hist_values[j])
+			dis_cen = np.array(C[i])-np.array(C[j])
+			Spa_sim_cur = np.exp(-1*np.linalg.norm(dis_cen, ord=2)/dnorm)
+			Capa_cur = His_sim_cur*Spa_sim_cur
+			if adjacency[i,j]==1:
+				capacity[i,j] = 0.25*Capa_cur
+				capacity[j,i] = 0.25*Capa_cur          
+			if i==keyindex:
+				capacity[k,j] = Capa_cur
+				capacity[j,k] = Capa_cur
+				capacity[k+1,j] = 3-Capa_cur
+				capacity[j,k+1] = 3-Capa_cur
+			elif j==keyindex:
+				capacity[k,i] = Capa_cur
+				capacity[i,k] = Capa_cur
+				capacity[k+1,i] = 3-Capa_cur
+				capacity[i,k+1] = 3-Capa_cur
+		
+	#Compute the cut (this code is provided to you)
+	_,current_flow = ff_max_flow(source, sink, capacity, k+2)
+	
+	reachable_node = bfs_residual_reachable(source, current_flow, capacity)
+	
+	'''create mask'''
+	B = np.zeros_like(S)
+	for i in range(len(reachable_node)):
+	cur_idx = (S==reachable_node[i])
+	B[cur_idx] = 1
+	return B
+	
+def bfs_residual_reachable(start, current_flow, capacity):
+
+	num_node = capacity.shape[0]-2
+	q = deque([])
+	q.append(start)
+	node_hist = np.zeros(num_node,dtype=bool)
+	visited_node = []
+	
+	while len(q) != 0:
+		u = q.popleft()
+		for i in range(num_node):
+			if~node_hist[i]:
+				if current_flow[u,i]<capacity[u,i]:
+					node_hist[i]=True
+					visited_node.append(i)
+					q.append(i) 
+	return  visited_node  
+\end{lstlisting}
 \end{document}
