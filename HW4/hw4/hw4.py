@@ -543,7 +543,7 @@ def example(file_name):
 
 def main():
     # These are the functions to do Question 1 Part 1-4. 
-    '''
+    
     q1()
     
     q2()
@@ -553,8 +553,8 @@ def main():
     namelist = ['flower1.jpg','flag1.jpg','porch1.png','porch1.png']
     for file_name in namelist:
         example(file_name)
-    '''
-    example('porch1.png')
+    
+    #example('porch1.png')
     
 
 if(__name__=="__main__"):

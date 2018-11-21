@@ -129,7 +129,7 @@
 		\label{fig:q3_3}
 	\end{figure}
 
-	\item 
+	\item One possible reason to downweight the capacity between adjacent nodes is to avoid the minimum cut at the edge between source and nodes with large capacity. 
 	\end{enumerate}
 
 	\item \begin{enumerate}
@@ -145,7 +145,7 @@
 			\label{fig:q4_1_2}
 		\end{figure}
 	
-	\item Flag segmentation is shown in Figure \ref{fig:q4_2_1} and \ref{fig:q4_2_2}. We can see that if we click on a red stripe, we are not able to segment all red stripes in the images.
+	\item Flag segmentation is shown in Figure \ref{fig:q4_2_1} and \ref{fig:q4_2_2}. We can see that if we click on a red stripe, we are not able to segment all red stripes in the images. The shadow in on the flag makes some superpixel of red strip darker, so that it is hard to be segmented with the clicked section. Moreover, we can see from superpixel overlay, each superpixel in one strip is only connected to two other superpixel in the same strip. So that in order to segment a full strip, the residual graph can only reach those superpixel, even though there are many other superpixel has high capacity with the source. Thus, it is hard.
 	\begin{figure}[H]
 		\centering\adjincludegraphics[width=\textwidth,trim={{.08\width} {.35\height} {.08\width} {.33\height}},clip,]{flag1_Superpixels.eps}
 		\caption{Superpixels of Question 4b}
